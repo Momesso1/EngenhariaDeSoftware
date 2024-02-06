@@ -1,0 +1,690 @@
+﻿@using MoMotors.Models
+@model VeiculosModel
+@{
+    ViewData["Title"] = "Vender Veículo";
+    Layout = "~/Areas/Identity/Pages/_AuthLayout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Veículo</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-3oBh1Vp9WqzRjZWzrgZGYLMDzkeLZG6Ot3VWl06D5Gy/GiPsWZ1FrDl9aNN3da1lG1ql5KtA9LAnTqRFBfRc5w==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+
+</head>
+<body>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+
+        input[type=text], input[type=number], select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            margin-top: 6px;
+            margin-bottom: 33px;
+            resize: vertical;
+        }
+
+
+
+        input[type=submit] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+            input[type=submit]:hover {
+                background-color: #45a049;
+            }
+
+        .container {
+            border-radius: 3px;
+        }
+
+        .notification {
+            background-color: #2196F3;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .is-invalid {
+            border: 1px solid red; /* Adiciona uma borda vermelha */
+        }
+
+        .invalid-feedback {
+            color: red; /* Define a cor vermelha para a mensagem de erro */
+            margin-top: -30px;
+        }
+
+    </style>
+    <header class="py-5 bg-light border-bottom mb-4 bg-dark">
+        <div class="container">
+            <div class="text-center my-5">
+                <h1 style="margin-top: 6%;" class="fw-bolder text-white">Qual veículo você está anunciando?</h1>
+            </div>
+        </div>
+    </header>
+
+    <div class="container" style="margin-bottom: 5%;">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card mb-4" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                    <div class="card-body">
+
+                        <form id="meuFormularioID" class="needs-validation" novalidate method="post" asp-area="" asp-controller="Vender" asp-action="AdicionarVeiculoAoUsuario">
+                            @Html.AntiForgeryToken()
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="tipoVeiculo">Tipo de veículo*</label>
+                                    <select id="tipoVeiculo" asp-for="Tipo" name="Tipo" required>
+                                        <option value="">Selecione o tipo de veículo</option>
+                                        <option value="carros">Carros</option>
+                                        <option value="motos">Motos</option>
+                                        <option value="caminM,hoes">Caminhões</option>
+                                    </select>
+
+
+                                    <label for="marca">Marca*</label>
+                                    <select id="marca"  onchange="updateHiddenField('marca')" required>
+                                        <option value="">Selecione a marca do veículo</option>
+                                    </select>
+
+
+
+                                    <label for="modelo">Modelo*</label>
+                                    <select id="modelo"  onchange="updateHiddenField('modelo')" required>
+                                        <option value="">Selecione o modelo do veículo</option>
+                                    </select>
+                                   
+
+
+
+                                    <label for="ano">Ano e combustível*</label>
+                                    <select id="ano" asp-for="AnoECombustivel"  name="AnoECombustivel" onchange="consultarVeiculo()" required>
+                                        <option value="">Selecione a versão do veículo</option>
+                                    </select>
+                                    
+
+
+                                    <label for="condition">Condição*</label>
+                                    <select asp-for="Condicao" name="Condicao" id="condition" name="Condicao" required>
+                                        <option value="">Selecione a condição do veículo</option>
+                                        <option value="Novo">Novo</option>
+                                        <option value="Usado">Usado</option>
+                                    </select>
+
+                                    <label for="color">Cor*</label>
+                                    <select asp-for="Cor" name="Cor" id="color" required>
+                                        <option value="">Selecione a cor do veículo</option>
+                                        <option value="Preto">Preto</option>
+                                        <option value="Branco">Branco</option>
+                                        <option value="Vermelho">Vermelho</option>
+                                        <option value="Azul">Azul</option>
+                                        <option value="Prata">Prata</option>
+                                        <option value="Outra">Outra</option>
+                                    </select>
+
+                                   
+                                    
+                                    
+                                </div>
+                                <div class="col-md-6">
+
+
+                                    <label for="price">Preço*</label>
+                                    <input type="text" asp-for="Preco" id="price" name="Preco" class="form-control" onkeyup="moeda(this)" minlength="5" required>
+                                    
+
+                                    <label for="transmission">Câmbio*</label>
+                                    <select id="transmission" asp-for="Cambio" name="Cambio" required>
+                                        <option value="">Selecione o câmbio do veículo</option>
+                                        <option value="Automático">Automático</option>
+                                        <option value="manual">Manual</option>
+                                    </select>
+                                    
+
+                                    <label for="mileage">Quilometragem*</label>
+                                    <input type="number" asp-for="Quilometragem" id="mileage" class="form-control" name="Quilometragem" required>
+
+
+
+                                    <label for="estado">Estado*</label>
+                                    <select id="estado" name="estado" required>
+                                        <option value="">Selecione um estado</option>
+
+                                    </select>
+
+                                    
+
+                                    <label for="cidade">Cidade*</label>
+                                    <select id="cidade" name="cidade" required>
+                                        <option value="">Selecione uma cidade</option>
+                                    </select>
+
+
+                                    <div id="outraCorDiv" style="display: none;">
+                                        <label for="outraCor">Cor Personalizada</label>
+                                        <input type="text" id="outraCor" name="outraCor">
+                                    </div>
+
+
+                                </div>
+                                <div class="col-md-12" style="height: 20%;">
+
+
+
+
+                                    <label for="description">Descrição*</label>
+                                    <textarea id="description" asp-for="Descricao" name="Descricao" class="form-control" placeholder="Descreva o veículo" required></textarea>
+                                    
+                                </div>
+
+                                <div class="row" style="margin-top: 15px">
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="Airbag.Value" name="Airbag" class="form-check-input" id="airbag">
+                                            <label class="form-check-label" for="airbag">Airbag</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="Alarme.Value" name="Alarme" class="form-check-input" id="alarme">
+                                            <label class="form-check-label" for="alarme">Alarme</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="ArCondicionado.Value" name="ArCondicionado" class="form-check-input" id="ar-condicionado">
+                                            <label class="form-check-label" for="ar-condicionado">Ar-condicionado</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="BancoComRegulagemDeAltura.Value" name="BancoComRegulagemDeAltura" class="form-check-input" id="banco-com-regulagem">
+                                            <label class="form-check-label" for="banco-com-regulagem">Banco com regulagem de altura</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="BancosComAquecimento.Value" name="BancosComAquecimento" class="form-check-input" id="bancos-com-aquecimento">
+                                            <label class="form-check-label" for="bancos-com-aquecimento">Bancos com aquecimento</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="BancosEmCouro.Value" name="BancosEmCouro" class="form-check-input" id="bancos-em-couro">
+                                            <label class="form-check-label" for="bancos-em-couro">Bancos em couro</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="ControleAutomaticoDeVelocidade.Value" name="ControleAutomaticoDeVelocidade" class="form-check-input" id="controle-automatico-velocidade">
+                                            <label class="form-check-label" for="controle-automatico-velocidade">Controle automático de velocidade</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="ControleDeTracao.Value" name="ControleDeTracao" class="form-check-input" id="controle-de-tracao">
+                                            <label class="form-check-label" for="controle-de-tracao">Controle de tração</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="DesembacadorTraseiro.Value" name="DesembacadorTraseiro" class="form-check-input" id="desembacador-traseiro">
+                                            <label class="form-check-label" for="desembacador-traseiro">Desembaçador traseiro</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="DirecaoHidraulica.Value" name="DirecaoHidraulica" class="form-check-input" id="direcao-hidraulica">
+                                            <label class="form-check-label" for="direcao-hidraulica">Direção hidráulica</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="EncostoDeCabecaTraseiro.Value" name="EncostoDeCabecaTraseiro" class="form-check-input" id="encosto-cabeca-traseiro">
+                                            <label class="form-check-label" for="encosto-cabeca-traseiro">Encosto de cabeça traseiro</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="FarolDeXenonio.Value" name="FarolDeXenonio" class="form-check-input" id="farol-de-xenonio">
+                                            <label class="form-check-label" for="farol-de-xenonio">Farol de xenônio</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="FreioABS.Value" name="FreioABS" class="form-check-input" id="freio-abs">
+                                            <label class="form-check-label" for="freio-abs">Freio ABS</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="GPS.Value" name="GPS" class="form-check-input" id="gps">
+                                            <label class="form-check-label" for="gps">GPS</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="LimpadorTraseiro.Value" name="LimpadorTraseiro" class="form-check-input" id="limpador-traseiro">
+                                            <label class="form-check-label" for="limpador-traseiro">Limpador traseiro</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="Radio.Value" name="Radio" class="form-check-input" id="radio">
+                                            <label class="form-check-label" for="radio">Rádio</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="RetrovisoresEletricos.Value" name="RetrovisoresEletricos" class="form-check-input" id="retrovisores-eletricos">
+                                            <label class="form-check-label" for="retrovisores-eletricos">Retrovisores elétricos</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="SensorDeChuva.Value" name="SensorDeChuva" class="form-check-input" id="sensor-de-chuva">
+                                            <label class="form-check-label" for="sensor-de-chuva">Sensor de chuva</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="SensorDeEstacionamento.Value" name="SensorDeEstacionamento" class="form-check-input" id="sensor-de-estacionamento">
+                                            <label class="form-check-label" for="sensor-de-estacionamento">Sensor de estacionamento</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="TetoSolar.Value" name="TetoSolar" class="form-check-input" id="teto-solar">
+                                            <label class="form-check-label" for="teto-solar">Teto solar</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="Tracao4x4.Value" name="Tracao4x4" class="form-check-input" id="tracao-4x4">
+                                            <label class="form-check-label" for="tracao-4x4">Tração 4x4</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="TravasEletricas.Value" name="TravasEletricas" class="form-check-input" id="travas-eletricas">
+                                            <label class="form-check-label" for="travas-eletricas">Travas elétricas</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="VidrosEletricos.Value" name="VidrosEletricos" class="form-check-input" id="vidros-eletricos">
+                                            <label class="form-check-label" for="vidros-eletricos">Vidros elétricos</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" asp-for="VolanteComRegulagemDeAltura.Value" name="VolanteComRegulagemDeAltura" class="form-check-input" id="volante-com-regulagem">
+                                            <label class="form-check-label" for="volante-com-regulagem">Volante com regulagem de altura</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                                <button type="submit" id="publicarBtn" class="btn btn-primary mb-4 full-width-btn" style="width: 100%;">Publicar anúncio</button>
+                                <input type="hidden" asp-for="FIPE" id="ResultadoConsulta" name="FIPE" />
+                                <input type="hidden" asp-for="Marca" id="Marca" name="Marca" />
+                                <input type="hidden" asp-for="Modelo" id="Modelo" name="Modelo" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+       <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center" style="font-size: 110%">
+                    Preço na tabela FIPE:
+                    <span id="resultadoConsulta" class="resultado-consulta"></span>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">Categories</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="#!">Web Design</a></li>
+                                <li><a href="#!">HTML</a></li>
+                                <li><a href="#!">Freebies</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="#!">JavaScript</a></li>
+                                <li><a href="#!">CSS</a></li>
+                                <li><a href="#!">Tutorials</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">Side Widget</div>
+                <div class="card-body">You can put anything you want inside of these side widgets. They are easy to use, and feature the Bootstrap 5 card component!</div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    <script>
+
+        function checkRequiredFields() {
+            let requiredFields = document.querySelectorAll('[required]');
+            let isValid = true;
+
+            for (let field of requiredFields) {
+                if (isEmpty(field)) {
+                    addErrorStyle(field);
+                    isValid = false;
+                } else {
+                    removeErrorStyle(field);
+                }
+            }
+
+            return isValid;
+        }
+
+        function isEmpty(field) {
+            if (field.type === 'checkbox') {
+                return !field.checked;
+            } else if (field.tagName === 'SELECT') {
+                return field.value === '0' || field.value === '';
+            } else {
+                return field.value.trim() === '';
+            }
+        }
+
+        function addErrorStyle(field) {
+            field.classList.add('is-invalid');
+
+            // Adiciona a mensagem de aviso abaixo do campo
+            let errorMessage = document.createElement('div');
+            errorMessage.className = 'invalid-feedback';
+            
+
+            // Verifica se já existe uma mensagem de erro, se não, adiciona
+            if (!field.nextElementSibling || !field.nextElementSibling.classList.contains('invalid-feedback')) {
+                field.parentNode.appendChild(errorMessage);
+            }
+        }
+
+        function removeErrorStyle(field) {
+            field.classList.remove('is-invalid');
+
+            // Remove a mensagem de aviso
+            let errorMessage = field.nextElementSibling;
+            if (errorMessage && errorMessage.classList.contains('invalid-feedback')) {
+                errorMessage.remove();
+            }
+        }
+
+
+    // Exemplo de uso da função checkRequiredFields
+    let form = document.getElementById("meuFormularioID");
+    let publicarBtn = document.getElementById("publicarBtn");
+    publicarBtn.addEventListener("click", function (event) {
+        // Evita o envio do formulário se os campos obrigatórios não estiverem preenchidos
+        if (!checkRequiredFields()) {
+            event.preventDefault();
+  
+        }
+    });
+
+
+
+
+        $('#color').change(function () {
+            var selectedColor = $('#color').val();
+            if (selectedColor === 'other') {
+                $('#outraCorDiv').show();
+            } else {
+                $('#outraCorDiv').hide();
+            }
+        });
+
+        // Função para carregar as marcas automaticamente ao abrir a página
+        carregarMarcas();
+
+
+        function carregarMarcas() {
+            var tipoVeiculo = $('#tipoVeiculo').val();
+            $.ajax({
+                type: 'GET',
+                url: `https://parallelum.com.br/fipe/api/v1/${tipoVeiculo}/marcas`,
+                success: function (marcas) {
+                    var marcaDropdown = $('#marca');
+                    marcaDropdown.empty();
+
+                    $.each(marcas, function (index, marca) {
+                        marcaDropdown.append($('<option>', {
+                            value: marca.codigo,
+                            text: marca.nome
+                        }));
+                    });
+
+                    marcaDropdown.prop('disabled', false);
+                },
+                error: function (error) {
+                    console.error('Erro ao carregar marcas:', error.responseText);
+                }
+            });
+        }
+
+        // Função para carregar os modelos quando o usuário clicar no SELECT
+        function carregarModelos() {
+            var tipoVeiculo = $('#tipoVeiculo').val();
+            var codigoMarca = $('#marca').val();
+
+            $.ajax({
+                type: 'GET',
+                url: `https://parallelum.com.br/fipe/api/v1/${tipoVeiculo}/marcas/${codigoMarca}/modelos`,
+                success: function (modelos) {
+                    var modeloDropdown = $('#modelo');
+                    modeloDropdown.empty();
+
+                    $.each(modelos.modelos, function (index, modelo) {
+                        modeloDropdown.append($('<option>', {
+                            value: modelo.codigo,
+                            text: modelo.nome
+                        }));
+                    });
+
+                    modeloDropdown.prop('disabled', false);
+                },
+                error: function (error) {
+                    console.error('Erro ao carregar modelos:', error.responseText);
+                }
+            });
+        }
+
+        function carregarAnos() {
+            var tipoVeiculo = $('#tipoVeiculo').val();
+            var codigoMarca = $('#marca').val();
+            var codigoModelo = $('#modelo').val();
+
+            $.ajax({
+                type: 'GET',
+                url: `https://parallelum.com.br/fipe/api/v1/${tipoVeiculo}/marcas/${codigoMarca}/modelos/${codigoModelo}/anos`,
+                success: function (anos) {
+                    var anoDropdown = $('#ano');
+                    anoDropdown.empty();
+
+                    $.each(anos, function (index, ano) {
+                        anoDropdown.append($('<option>', {
+                            value: ano.codigo,
+                            text: ano.nome
+                        }));
+                    });
+
+                    anoDropdown.prop('disabled', false);
+
+                    // Consulta automaticamente ao carregar os anos
+                    consultarVeiculo();
+                },
+                error: function (error) {
+                    console.error('Erro ao carregar anos:', error.responseText);
+                }
+            });
+        }
+        // Função para consultar o veículo selecionado
+        function consultarVeiculo() {
+            var tipoVeiculo = $('#tipoVeiculo').val();
+            var selecao = {
+                codigoMarca: $('#marca').val(),
+                codigoModelo: $('#modelo').val(),
+                codigoAno: $('#ano').val()
+            };
+
+            $('#Marca').val($('#marca option:selected').text());
+            $('#Modelo').val($('#modelo option:selected').text());
+
+            $.ajax({
+                type: 'GET',
+                url: `https://parallelum.com.br/fipe/api/v1/${tipoVeiculo}/marcas/${selecao.codigoMarca}/modelos/${selecao.codigoModelo}/anos/${selecao.codigoAno}`,
+                success: function (data) {
+                    $('#resultadoConsulta').text(` ${data.Valor}`);
+
+                    $('#ResultadoConsulta').val(data.Valor); // Adiciona esta linha para definir o valor no campo oculto
+                },
+                error: function (error) {
+                    console.error('Erro ao consultar veículo:', error.responseText);
+                }
+            });
+        }
+        $('#tipoVeiculo').change(function () {
+            $('#marca, #modelo, #ano').empty().prop('disabled', true);
+            carregarMarcas();
+        });
+
+        $('#marca').change(function () {
+            $('#modelo, #ano').empty().prop('disabled', true);
+            carregarModelos();
+        });
+
+        $('#modelo').change(function () {
+            $('#ano').empty().prop('disabled', true);
+            carregarAnos();
+        });
+
+        // Consulta automaticamente ao carregar a página
+        $(document).ready(function () {
+            carregarMarcas();
+            consultarVeiculo();
+        });
+        function mascara(o, f) {
+            v_obj = o
+            v_fun = f
+            setTimeout(execmascara, 1)
+        }
+
+        function execmascara() {
+            v_obj.value = v_fun(v_obj.value)
+        }
+
+        function moeda(z) {
+            v = z.value;
+            v = v.replace(/\D/g, "") // permite digitar apenas numero
+            v = v.replace(/(\d{1})(\d{14})$/, "$1.$2") // coloca ponto antes dos ultimos digitos
+            v = v.replace(/(\d{1})(\d{11})$/, "$1.$2") // coloca ponto antes dos ultimos 11 digitos
+            v = v.replace(/(\d{1})(\d{8})$/, "$1.$2") // coloca ponto antes dos ultimos 8 digitos
+            v = v.replace(/(\d{1})(\d{5})$/, "$1.$2") // coloca ponto antes dos ultimos 5 digitos
+            v = v.replace(/(\d{1})(\d{1,2})$/, "$1,$2") // coloca virgula antes dos ultimos 2 digitos
+            z.value = "R$ " + v;
+        }
+        var $j = jQuery.noConflict();
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Elementos do DOM
+            const estadoSelect = document.getElementById('estado');
+            const cidadeSelect = document.getElementById('cidade');
+
+            // URL das APIs do IBGE
+            const estadosApiUrl = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados';
+            const municipiosApiUrl = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados/';
+
+            // Preencher o select de estados
+            fetch(estadosApiUrl)
+                .then(response => response.json())
+                .then(estados => {
+                    estados.forEach(estado => {
+                        const option = document.createElement('option');
+                        option.value = estado.sigla;
+                        option.textContent = estado.nome;
+                        estadoSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Erro ao obter a lista de estados:', error));
+
+            // Atualizar o select de cidades com base no estado selecionado
+            estadoSelect.addEventListener('change', function () {
+                const estadoSelecionado = estadoSelect.value;
+
+                // Limpar as opções anteriores
+                cidadeSelect.innerHTML = '<option value="">Selecione uma cidade</option>';
+
+                if (estadoSelecionado) {
+                    // Obter a lista de municípios do estado selecionado
+                    fetch(municipiosApiUrl + estadoSelecionado + '/municipios')
+                        .then(response => response.json())
+                        .then(municipios => {
+                            municipios.forEach(municipio => {
+                                const option = document.createElement('option');
+                                option.value = municipio.nome;
+                                option.textContent = municipio.nome;
+                                cidadeSelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => console.error('Erro ao obter a lista de municípios:', error));
+                }
+            });
+        });
+
+    </script>
+
+</body>
+</html>
