@@ -420,10 +420,19 @@
                 {
                     @foreach (var veiculo in @Model)
                     {
+                        
 
 
                         <div class="col mb-5">
                             <div class="card h-100">
+
+                                <div class="card-header" style="background-color: white">
+                                    @veiculo.Cidade
+                                    -
+                                    @veiculo.Estado
+                                    <i class="fas fa-map-marker"></i>
+
+                                </div>
                                 <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
 
                                 <div class="car-listing">

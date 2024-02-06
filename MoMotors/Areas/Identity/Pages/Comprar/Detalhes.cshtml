@@ -161,6 +161,31 @@
                 border-color: #333;
             }
 
+        .details {
+            width: 110%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #f0f8ff; /* Azul mais claro e discreto */
+        }
+
+            .details td {
+                padding: 8px; /* Diminuir a distância entre as linhas */
+                border: none; /* Remover as bordas */
+                color: #1565c0; /* Nova cor do texto azul */
+            }
+
+                .details td:first-child {
+                    font-weight: bold;
+                    font-size: 14px;
+                    width: 40%;
+                    padding-left: 10%;
+                }
+
+                .details td:last-child {
+                    width: 60%;
+                    font-size: 14px;
+                    padding-left: 9%;
+                }
     </style>
 
 </head>
@@ -181,7 +206,12 @@
                 </div>
             </div>
 
-
+            <h5>
+                Descrição
+            </h5>
+            <p>
+                    @Model.Descricao
+            </p>
         </div>
 
 
@@ -252,7 +282,7 @@
                 </tr>
 
                 <tr>
-                    <td>Valor na tabela FIPE:</td>
+                    <td>FIPE:</td>
                     <td>@Model.FIPE</td>
 
                 </tr>
@@ -260,6 +290,62 @@
             </table>
         </div>
     </div>
+
+    <!--
+    <div class="mt-5" style="zoom: 90%; text-align: center; justify-items: center; justify-content: center;">
+        <table class="details" style="width: 80%; border: 1px solid #333; border-collapse: collapse; margin: 0 auto;">
+            <tr>
+                <td style="width: 40%; border: 1px solid #333; padding: 8px;">Marca:</td>
+                <td style="width: 60%; border: 1px solid #333; padding: 8px;">@Model.Marca</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #333; padding: 8px;">Modelo:</td>
+                <td style="border: 1px solid #333; padding: 8px;">@Model.Modelo</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #333; padding: 8px;">Transmissão:</td>
+                <td style="border: 1px solid #333; padding: 8px;">@Model.Cambio</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #333; padding: 8px;">Condição:</td>
+                <td style="border: 1px solid #333; padding: 8px;">@Model.Condicao</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #333; padding: 8px;">Ano:</td>
+                <td style="border: 1px solid #333; padding: 8px;">@Model.AnoECombustivel.Substring(0, 4)</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #333; padding: 8px;">Quilometragem:</td>
+                <td style="border: 1px solid #333; padding: 8px;">@Model.Quilometragem</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #333; padding: 8px;">Tipo de combustível:</td>
+                @if (Model.AnoECombustivel[5] == '1')
+                {
+                    <td style="border: 1px solid #333; padding: 8px;">Gasolina</td>
+                }
+                else if (Model.AnoECombustivel[5] == '3')
+                {
+                    <td style="border: 1px solid #333; padding: 8px;">Diesel</td>
+                }
+                else
+                {
+                    <td style="border: 1px ; padding: 8px;">Etanol</td>
+                }
+            </tr>
+            <tr>
+                <td style="border: 1px solid #333; padding: 8px;">Cor:</td>
+                <td style="border: 1px solid #333; padding: 8px;">@Model.Cor</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #333; padding: 8px;">Valor na tabela FIPE:</td>
+                <td style="border: 1px solid #333; padding: 8px;">@Model.FIPE</td>
+            </tr>
+        </table>
+    </div>
+    -->
+
+
 
     <script>
 
