@@ -38,34 +38,37 @@
 
             <div class="container-fluid">
                 <a class="nav-link text-dark" href="/Views/Home/Index">MoMotors</a>
-                 <partial name="_LoginPartial.cshtml"/>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-                            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+                <span class="nav-link text-white">
+                    <partial name="_LoginPartial.cshtml" />
+                </span>
 
-                    <div class="collapse navbar-collapse justify-content-center" id="navbarCollapse">
-                        <ul class="navbar-nav text-center">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Comprar" asp-action="Index">Comprar</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Vender" asp-action="Index">Vender</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Chat" asp-action="Index">Chat</a>
-                            </li>
-                            
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-                        </ul>
-                    </div>
-              
+                <div class="collapse navbar-collapse justify-content-center" id="navbarCollapse">
+                    <ul class="navbar-nav text-center">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Comprar" asp-action="Index">Comprar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Vender" asp-action="Index">Vender</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Chat" asp-action="Index">Chat</a>
+                        </li>
+
+
+                    </ul>
+                </div>
+
 
             </div>
         </nav>
     </header>
 
-   
+
 
     <!-- Conteúdo da Página -->
     <div>
@@ -74,7 +77,7 @@
         </main>
     </div>
 
-   
+
     <environment include="Development">
         <script type="text/javascript" src="~/js/jquery.min.js"></script>
         <script type="text/javascript" src="~/js/bootstrap.min.js"></script>

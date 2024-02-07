@@ -2,16 +2,18 @@
     Layout = "~/Areas/Identity/Pages/Shared/_Layout.cshtml";
 
 }
+@using Microsoft.AspNetCore.Identity
+@using MoMotors.Areas.Identity.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 
 <body>
 <header>
     <nav class="navbar navbar-expand-md navbar-light bg-dark text-white box-shadow mb-3 fixed-top">
         <div class="container-fluid">
-                    <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">MoMotors </a>
-
-                    <span class="nav-link text-white"> @User.Identity.Name</span>
-               
+                    <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">MoMotors </a>              
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -47,6 +49,18 @@
 
                         }
                     </ul>
+
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <li class="nav-link text-white">
+                            <a id="manage" class="nav-link text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Gerenciar Perfil">Hello @UserManager.GetUserName(User)!</a>
+                        </li>
+                        <li class="nav-link text-white">
+                            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                <button id="logout" type="submit" class="nav-link btn btn-link text-white border-0">Logout</button>
+                            </form>
+                        </li>
+                    }
             </div>
 
 
