@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MoMotors.Areas.Identity.Data;
 using MoMotors.Areas.Identity.Repositorio;
 using MoMotors.Data;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
