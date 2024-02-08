@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 using MoMotors.Areas.Identity.Models;
+using MoMotors.Data;
 using MoMotors.Models;
 
 namespace MoMotors.Areas.Identity.Data
@@ -18,6 +19,20 @@ namespace MoMotors.Areas.Identity.Data
 
         public virtual ICollection<ChatIAModel> ChatIA { get; set; }
 
+        public int GetQuantidadeVeiculosRegistradosNoBancoDeDados(MoMotorsDbContext MoMotorsDbContext)
+        {
+            if (MoMotorsDbContext != null && !string.IsNullOrEmpty(Id))
+            {
+                // Consulta para contar a quantidade de veículos registrados para o usuário pelo Id
+                return MoMotorsDbContext.Veiculos
+                    .Where(v => v.UserId == Id)
+                    .Count();
+            }
+            else
+            {
+                return 0; // Se o contexto ou o Id do usuário forem nulos, retorna 0
+            }
+        }
 
     }
 

@@ -1,14 +1,19 @@
 ﻿@page
+@using MoMotors.Data
 @model IndexModel
 
 @inject SignInManager<ApplicationUser> SignInManager
+@inject MoMotorsDbContext MoMotorsDbContext
 @inject UserManager<ApplicationUser> UserManager
+
 
 @{
     ViewData["Title"] = "Perfil";
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
     Layout = "~/Areas/Identity/Pages/_AuthLayout.cshtml";
     var user = await UserManager.GetUserAsync(User);
+    int quantidadeVeiculos = user.GetQuantidadeVeiculosRegistradosNoBancoDeDados(MoMotorsDbContext);
+
 }
 
 
@@ -142,8 +147,19 @@
                                     <p class="small text-muted mb-0">Followers</p>
                                 </div>
                                 <div>
-                                    <p class="mb-1 h5">478</p>
-                                    <p class="small text-muted mb-0">Following</p>
+                                    @if (quantidadeVeiculos != null)
+                                    {
+                                        <p class="mb-1 h5">@quantidadeVeiculos</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="mb-1 h5">0</p>
+
+                                    }
+                                    
+
+                               
+                                    <p class="small text-muted mb-0">Veículos à venda</p>
                                 </div>
                             </div>
                         </div>
