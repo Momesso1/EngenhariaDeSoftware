@@ -15,9 +15,7 @@ namespace MoMotors.Areas.Identity.Data
         [Column(TypeName = "nvarchar(50)")]
         public string Name { get; set; }
 
-        public virtual ICollection<VeiculosModel> Veiculos { get; set; }
-
-        public virtual ICollection<ChatIAModel> ChatIA { get; set; }
+       
 
         public int GetQuantidadeVeiculosRegistradosNoBancoDeDados(MoMotorsDbContext MoMotorsDbContext)
         {
@@ -33,6 +31,25 @@ namespace MoMotors.Areas.Identity.Data
                 return 0; // Se o contexto ou o Id do usuário forem nulos, retorna 0
             }
         }
+
+        public List<VeiculosModel> GetVeiculosÀVenda(MoMotorsDbContext MoMotorsDbContext)
+        {
+            if (MoMotorsDbContext != null && !string.IsNullOrEmpty(Id))
+            {
+                // Consulta para obter a lista de veículos registrados para o usuário pelo Id
+                return MoMotorsDbContext.Veiculos
+                    .Where(v => v.UserId == Id)
+                    .ToList();
+            }
+            else
+            {
+                return new List<VeiculosModel>(); // Se o contexto ou o Id do usuário forem nulos, retorna uma lista vazia
+            }
+        }
+
+        public virtual ICollection<VeiculosModel> Veiculos { get; set; }
+
+        public virtual ICollection<ChatIAModel> ChatIA { get; set; }
 
     }
 

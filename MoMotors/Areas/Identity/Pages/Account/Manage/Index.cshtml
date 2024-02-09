@@ -13,11 +13,11 @@
     Layout = "~/Areas/Identity/Pages/_AuthLayout.cshtml";
     var user = await UserManager.GetUserAsync(User);
     int quantidadeVeiculos = user.GetQuantidadeVeiculosRegistradosNoBancoDeDados(MoMotorsDbContext);
-
 }
 
 
 <head>
+
 
     <style>
 
@@ -38,6 +38,60 @@
             justify-items: center;
 
         }
+
+        .container {
+            border-radius: 3px;
+        }
+
+        .notification {
+            background-color: #2196F3;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .car-listing {
+            font-family: Arial, sans-serif;
+            min-height: 250px;
+            max-width: 400px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+            .car-listing h1 {
+                font-size: 24px;
+                color: #333;
+                margin: 0;
+            }
+
+            .car-listing .price {
+                font-size: 20px;
+                color: black;
+                font-weight: bold;
+                margin: 10px 0;
+            }
+
+            .car-listing .info {
+                display: flex;
+                align-items: center;
+                gap: 55px;
+            }
+
+                .car-listing .info button {
+                    background-color: #f00;
+                    color: #fff;
+                    border: none;
+                    border-radius: 4px;
+                    padding: 5px 10px;
+                    cursor: pointer;
+                }
+
+                .car-listing .info span {
+                    font-size: 14px;
+                    color: #666;
+                }
+
     </style>
 </head>
 
@@ -181,30 +235,82 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between align-items-center mb-4">
-                                <p class="lead fw-normal mb-0">Recent photos</p>
+                                <p class="lead fw-normal mb-0">Veículos à venda</p>
                                 <p class="mb-0"><a href="#!" class="text-muted">Show all</a></p>
                             </div>
-                            <div class="row g-2">
-                                <div class="col mb-2">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
-                                         alt="image 1" class="w-100 rounded-3">
-                                </div>
-                                <div class="col mb-2">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
-                                         alt="image 1" class="w-100 rounded-3">
-                                </div>
-                            </div>
-                            <div class="row g-2">
-                                <div class="col">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
-                                         alt="image 1" class="w-100 rounded-3">
-                                </div>
-                                <div class="col">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
-                                         alt="image 1" class="w-100 rounded-3">
-                                </div>
+                        <div class="row g-2">
+                            <div class="col-md-6 mb-2">
+                                @{
+                                    foreach (var veiculo in user.GetVeiculosÀVenda(MoMotorsDbContext))
+                                    {
+
+                                        <div class="col mb-1">
+                                            <div class="card " style="margin-bottom: 15px; width: 100%;">
+
+                                                <div class="card-header" style="background-color: white">
+                                                    @veiculo.Cidade
+                                                    -
+                                                    @veiculo.Estado
+                                                    <i class="fas fa-map-marker"></i>
+
+                                                </div>
+                                                <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
+
+                                                <div class="car-listing">
+                                                    <h8>@veiculo.Marca @veiculo.Modelo</h8>
+                                                    <p class="price" style="position: absolute; bottom: 115px">
+                                                        @veiculo.Preco
+                                                        @if (!string.IsNullOrEmpty(veiculo.Preco) && !string.IsNullOrEmpty(veiculo.FIPE) && veiculo.FIPE.Length >= 4)
+                                                        {
+                                                            int preco;
+                                                            int fipe;
+
+                                                            // Remover "." e "," e pegar a substring a partir do quarto caractere
+                                                            string precoSubstring = veiculo.Preco.Substring(3).Replace(".", "").Replace(",", "");
+                                                            string fipeSubstring = veiculo.FIPE.Substring(3).Replace(".", "").Replace(",", "");
+
+                                                            if (int.TryParse(precoSubstring, out preco) && int.TryParse(fipeSubstring, out fipe))
+                                                            {
+
+                                                                @if (preco > fipe)
+                                                                {
+                                                                    <i style="font-size: 18px" class="bi bi-arrow-up text-danger"></i>
+                                                                }
+                                                                else if (preco < fipe)
+                                                                {
+                                                                    <i style="font-size: 18px" class="bi bi-arrow-down text-success"></i>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <i style="font-size: 18px" class="bi bi-arrow-down text-success"></i>
+                                                                }
+
+                                                            }
+
+                                                        }
+                                                    <p>
+                                                        <div class="info" style="position: absolute; bottom: 65px; left: 10px; right: 10px;">
+                                                            <button class="year">@veiculo.AnoECombustivel.Substring(0, 4)</button>
+                                                            <span class="mileage">@veiculo.Quilometragem km</span>
+                                                            <span class="transmission">@veiculo.Cambio</span>
+                                                        </div>
+                                                        <div style="margin-top: 15px; position: absolute; bottom: 10px; margin-left: 20%">
+                                                            <div class="text-center">
+                                                                <form asp-controller="Comprar" asp-action="Detalhes" method="post">
+                                                                    <input type="hidden" name="id" value="@veiculo.Id" />
+                                                                    <button type="submit" class="btn btn-outline-dark mt-auto">Ver detalhes</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             </div>
