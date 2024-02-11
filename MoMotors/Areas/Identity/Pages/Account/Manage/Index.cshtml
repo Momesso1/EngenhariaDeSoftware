@@ -14,8 +14,9 @@
     var user = await UserManager.GetUserAsync(User);
     int quantidadeVeiculos = user.GetQuantidadeVeiculosRegistradosNoBancoDeDados(MoMotorsDbContext);
 }
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-
+<partial name="_StatusMessage" for="StatusMessage" />
 <head>
 
 
@@ -33,9 +34,7 @@
             border-left: 1px solid black;
             height: 30px; /* Adjust the height as needed */
             margin: 0 auto:
-            justify-content: center;
-            text-align: center;
-            justify-items: center;
+            
 
         }
 
@@ -53,7 +52,7 @@
         .car-listing {
             font-family: Arial, sans-serif;
             min-height: 250px;
-            max-width: 400px;
+            max-width: 440px;
             border: 1px solid #ccc;
             padding: 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -75,7 +74,7 @@
             .car-listing .info {
                 display: flex;
                 align-items: center;
-                gap: 55px;
+                gap: 12px;
             }
 
                 .car-listing .info button {
@@ -92,6 +91,7 @@
                     color: #666;
                 }
 
+        
     </style>
 </head>
 
@@ -165,26 +165,52 @@
                                         </a>
                                 </div>
 
-                                
-
-
-
-
-
-
+                               
                                 </div>
                         
                         </div>
 
                         
                           </div>
+                    <form id="profile-form" method="post" enctype="multipart/form-data">
                         <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
-                            <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                            <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" 
-                                     alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
-                                     style="width: 150px; z-index: 1">
-                                
+                        <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+                            <div id="profileImageSection">
+                                @if (user.ImagemPerfil == null || user.ImagemPerfil.Length == 0)
+                                {
+                                    <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                         alt="Generic placeholder image" class="img-thumbnail mt-4 mb-2"
+                                         style="width: 150px; z-index: 1">
+                                }
+                                else
+                                {
+                                        var base64Image = Convert.ToBase64String(user.ImagemPerfil);
+                                        var imgSrc = $"data:image/png;base64,{base64Image}";
+                                        <img src="@imgSrc"
+                                             alt="User Profile Image" class="img-thumbnail mt-4 mb-2"
+                                             style="width: 150px; height: 110px; object-fit: cover; z-index: 1">
+                                }
                             </div>
+
+                            <div>
+
+
+                                
+                                 
+                           
+                            <div  class="card mt-4 mb-10" id="profileImageInput" style="width: 150px; height: 108px; z-index: 1; position: relative; overflow: hidden; display: none;">
+                                
+                                <label for="inputImagemPerfil" style="cursor: pointer; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 30px; color: blue;">+</label>
+                                        <input asp-for="Input.ImagemPerfil" class="form-control" type="file" id="inputImagemPerfil" accept="image/*" style="display: none;">
+                                    </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark" style="z-index: 1; margin-top: 25%;" onclick="toggleProfileImageAndPhone();">
+                                Editar perfil
+                            </button>
+
+
+                        </div>
+
                             <div class="ms-3" style="margin-top: 130px;">
                                 <h5>@user.Name</h5>
                                
@@ -229,23 +255,77 @@
                             <div class="mb-5">
                                 <p class="lead fw-normal mb-1">About</p>
                                 <div class="p-4" style="background-color: #f8f9fa;">
-                                    <p class="font-italic mb-1">Web Developer</p>
+                                <div id="phoneNumberSection">
+                                        @if (user.PhoneNumber == null)
+                                    {
+                                        <p class="font-italic mb-1">Telefone: Nenhum número de telefone adicionado</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="font-italic mb-1">Número de telefone: @user.PhoneNumber</p>
+                                    }
+                                </div>
+
+                                <div id="phoneNumberInput" style="display: none;">
+
+                                        <div class="form-floating mb-3">
+                                            
+                                            <input asp-for="Input.PhoneNumber" id="inputPhoneNumber" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Número de telefone" />
+                                            <label asp-for="Input.PhoneNumber"></label>
+                                            
+                                            <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                                        </div>
+                                </div>
+
+                                  
+                                    
+
                                     <p class="font-italic mb-1">Lives in New York</p>
                                     <p class="font-italic mb-0">Photographer</p>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <p class="lead fw-normal mb-0">Veículos à venda</p>
-                                <p class="mb-0"><a href="#!" class="text-muted">Show all</a></p>
+                            <div style="justify-content: center; justify-items: center; text-align: center" class="d-flex align-items-center mt-4">
+                                <button id="update-profile-button" type="submit" class="btn btn-outline-dark" data-mdb-ripple-color="dark" style="display: none" onclick="toggleProfileImageAndPhone();">
+                                    Salvar alterações
+                                </button>
                             </div>
-                        <div class="row g-2">
-                            <div class="col-md-6 mb-2">
-                                @{
-                                    foreach (var veiculo in user.GetVeiculosÀVenda(MoMotorsDbContext))
-                                    {
 
-                                        <div class="col mb-1">
-                                            <div class="card " style="margin-bottom: 15px; width: 100%;">
+                           
+                        <div>
+                            <p class="lead fw-normal mb-0">Veículos à venda</p>
+                        
+                        @{
+                            var pageSize = 6;  // Defina o número máximo de veículos por página
+                            var paginaAtual = Request.Query["page"].ToString();
+                            if (string.IsNullOrEmpty(paginaAtual))
+                            {
+                                paginaAtual = "1";
+                            }
+                        }
+                        <div class="d-flex justify-content-center mt-4">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination">
+                                    @for (int i = 1; i <= Math.Ceiling((double)user.GetVeiculosÀVenda(MoMotorsDbContext).Count() / pageSize); i++)
+                                    {
+                                        <li class="page-item @(i == Convert.ToInt32(paginaAtual) ? "active" : "")">
+                                            <a class="page-link" href="?page=@i">@i</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                        <div class="row g-2">
+                            @{
+                                
+
+                                var startIndex = (Convert.ToInt32(paginaAtual) - 1) * pageSize;
+                                var veiculosPaginados = user.GetVeiculosÀVenda(MoMotorsDbContext).Skip(startIndex).Take(pageSize);
+
+                                foreach (var veiculo in veiculosPaginados)
+                                {
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card" style="margin-bottom: 15px; width: 100%;">
 
                                                 <div class="card-header" style="background-color: white">
                                                     @veiculo.Cidade
@@ -254,9 +334,9 @@
                                                     <i class="fas fa-map-marker"></i>
 
                                                 </div>
-                                                <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
+                                                <img class="card-img-top"  src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
 
-                                                <div class="car-listing">
+                                                <div class="car-listing" style="width: 100%">
                                                     <h8>@veiculo.Marca @veiculo.Modelo</h8>
                                                     <p class="price" style="position: absolute; bottom: 115px">
                                                         @veiculo.Preco
@@ -294,23 +374,19 @@
                                                             <span class="mileage">@veiculo.Quilometragem km</span>
                                                             <span class="transmission">@veiculo.Cambio</span>
                                                         </div>
-                                                        <div style="margin-top: 15px; position: absolute; bottom: 10px; margin-left: 20%">
-                                                            <div class="text-center">
-                                                                <form asp-controller="Comprar" asp-action="Detalhes" method="post">
-                                                                    <input type="hidden" name="id" value="@veiculo.Id" />
-                                                                    <button type="submit" class="btn btn-outline-dark mt-auto">Ver detalhes</button>
-                                                                </form>
-                                                            </div>
-                                                        </div>
+                                                       
                                                 </div>
                                             </div>
                                         </div>
                                     }
                                 }
                             </div>
-                        </div>
+                        
 
-
+                        
+                    </div>
+                    
+                        </form>
                     </div>
                 </div>
             </div>
@@ -320,6 +396,49 @@
     </div>
 
 
+    <script>
+
+     
+        function toggleProfileImageAndPhone() {
+            var profileImageSection = document.getElementById("profileImageSection");
+            var profileImageInput = document.getElementById("profileImageInput");
+
+            var phoneNumberSection = document.getElementById("phoneNumberSection");
+            var phoneNumberInput = document.getElementById("phoneNumberInput");
+
+            var saveChangesButton = document.getElementById("update-profile-button");
+
+            // Inverte a visibilidade do input de imagem
+            if (profileImageSection.style.display === "none") {
+                profileImageSection.style.display = "block";
+                profileImageInput.style.display = "none";
+            } else {
+                profileImageSection.style.display = "none";
+                profileImageInput.style.display = "block";
+            }
+
+            // Inverte a visibilidade do input de telefone
+            if (phoneNumberSection.style.display === "none") {
+                phoneNumberSection.style.display = "block";
+                phoneNumberInput.style.display = "none";
+            } else {
+                phoneNumberSection.style.display = "none";
+                phoneNumberInput.style.display = "block";
+            }
+
+            // Mostra ou esconde o botão "Salvar alterações" com base na visibilidade dos inputs
+            saveChangesButton.style.display =
+                (profileImageSection.style.display === "none" && phoneNumberSection.style.display === "none")
+                    ? "block"
+                    : "none";
+        }
+    </script>
+
+
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
 </body>
 
 

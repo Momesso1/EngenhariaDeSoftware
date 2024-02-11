@@ -178,6 +178,9 @@ namespace MoMotors.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<byte[]>("ImagemPerfil")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 

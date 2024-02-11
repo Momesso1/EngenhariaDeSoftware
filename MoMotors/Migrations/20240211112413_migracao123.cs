@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MoMotors.Migrations
 {
     /// <inheritdoc />
-    public partial class Migracao1 : Migration
+    public partial class migracao123 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,6 +31,7 @@ namespace MoMotors.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    ImagemPerfil = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -158,20 +159,41 @@ namespace MoMotors.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ChatIA",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatIA", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ChatIA_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Veiculos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Titulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Cidade = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Tipo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Marca = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Preco = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Modelo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AnoECombustivel = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Quilometragem = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Placa = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Condicao = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quilometragem = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Cor = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Cambio = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Descricao = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FIPE = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -207,6 +229,28 @@ namespace MoMotors.Migrations
                         name: "FK_Veiculos_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PerguntaRespostaModel",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ChatIAModelId = table.Column<int>(type: "int", nullable: false),
+                    Pergunta = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Resposta = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataEnvio = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PerguntaRespostaModel", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PerguntaRespostaModel_ChatIA_ChatIAModelId",
+                        column: x => x.ChatIAModelId,
+                        principalTable: "ChatIA",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -251,6 +295,16 @@ namespace MoMotors.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ChatIA_UserId",
+                table: "ChatIA",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PerguntaRespostaModel_ChatIAModelId",
+                table: "PerguntaRespostaModel",
+                column: "ChatIAModelId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Veiculos_UserId",
                 table: "Veiculos",
                 column: "UserId");
@@ -275,10 +329,16 @@ namespace MoMotors.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "PerguntaRespostaModel");
+
+            migrationBuilder.DropTable(
                 name: "Veiculos");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "ChatIA");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

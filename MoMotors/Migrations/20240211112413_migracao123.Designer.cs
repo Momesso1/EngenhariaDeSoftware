@@ -12,8 +12,8 @@ using MoMotors.Data;
 namespace MoMotors.Migrations
 {
     [DbContext(typeof(MoMotorsDbContext))]
-    [Migration("20240204192917_das")]
-    partial class das
+    [Migration("20240211112413_migracao123")]
+    partial class migracao123
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -181,6 +181,9 @@ namespace MoMotors.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<byte[]>("ImagemPerfil")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -231,6 +234,54 @@ namespace MoMotors.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("MoMotors.Areas.Identity.Models.ChatIAModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ChatIA");
+                });
+
+            modelBuilder.Entity("MoMotors.Areas.Identity.Models.PerguntaRespostaModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChatIAModelId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DataEnvio")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Pergunta")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Resposta")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatIAModelId");
+
+                    b.ToTable("PerguntaRespostaModel");
+                });
+
             modelBuilder.Entity("MoMotors.Models.VeiculosModel", b =>
                 {
                     b.Property<int>("Id")
@@ -265,7 +316,12 @@ namespace MoMotors.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Cilindradas")
+                    b.Property<string>("Cidade")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Condicao")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("ControleAutomaticoDeVelocidade")
@@ -290,6 +346,10 @@ namespace MoMotors.Migrations
                     b.Property<bool?>("EncostoDeCabecaTraseiro")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FIPE")
                         .HasColumnType("nvarchar(max)");
 
@@ -311,9 +371,6 @@ namespace MoMotors.Migrations
 
                     b.Property<string>("Modelo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Portas")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Preco")
@@ -339,10 +396,6 @@ namespace MoMotors.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Tipo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Titulo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -420,6 +473,28 @@ namespace MoMotors.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MoMotors.Areas.Identity.Models.ChatIAModel", b =>
+                {
+                    b.HasOne("MoMotors.Areas.Identity.Data.ApplicationUser", "User")
+                        .WithMany("ChatIA")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MoMotors.Areas.Identity.Models.PerguntaRespostaModel", b =>
+                {
+                    b.HasOne("MoMotors.Areas.Identity.Models.ChatIAModel", "ChatIA")
+                        .WithMany("PerguntasERespostas")
+                        .HasForeignKey("ChatIAModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ChatIA");
+                });
+
             modelBuilder.Entity("MoMotors.Models.VeiculosModel", b =>
                 {
                     b.HasOne("MoMotors.Areas.Identity.Data.ApplicationUser", "User")
@@ -433,7 +508,14 @@ namespace MoMotors.Migrations
 
             modelBuilder.Entity("MoMotors.Areas.Identity.Data.ApplicationUser", b =>
                 {
+                    b.Navigation("ChatIA");
+
                     b.Navigation("Veiculos");
+                });
+
+            modelBuilder.Entity("MoMotors.Areas.Identity.Models.ChatIAModel", b =>
+                {
+                    b.Navigation("PerguntasERespostas");
                 });
 #pragma warning restore 612, 618
         }

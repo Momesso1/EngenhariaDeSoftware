@@ -103,7 +103,7 @@
                                 </div>
 
                                 <div class="col text-center">
-                                    <a class="nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData" style="color: black">
+                                    <a class="nav-link" style="color: black">
                                         Dados
                                     </a>
                                 </div>
@@ -123,9 +123,20 @@
                     </div>
                     <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
                         <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                            <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
-                                 alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
-                                 style="width: 150px; z-index: 1">
+                            @if (user.ImagemPerfil == null || user.ImagemPerfil.Length == 0)
+                            {
+                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt="Generic placeholder image" class="img-thumbnail mt-4 mb-2"
+                                     style="width: 150px; z-index: 1">
+                            }
+                            else
+                            {
+                                var base64Image = Convert.ToBase64String(user.ImagemPerfil);
+                                var imgSrc = $"data:image/png;base64,{base64Image}";
+                                <img src="@imgSrc"
+                                     alt="User Profile Image" class="img-thumbnail mt-4 mb-2"
+                                     style="width: 150px; height: 110px; object-fit: cover; z-index: 1">
+                            }
 
                         </div>
                         <div class="ms-3" style="margin-top: 130px;">

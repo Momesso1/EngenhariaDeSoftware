@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MoMotors.Areas.Identity.Data;
 using MoMotors.Areas.Identity.Repositorio;
@@ -31,15 +32,20 @@ namespace MoMotors.Areas.Identity.Controllers
             return View("~/Areas/Identity/Pages/Vender/Index.cshtml");
         }
 
+      
+
+
+
         [HttpPost]
-        
         public IActionResult AdicionarVeiculoAoUsuario(VeiculosModel veiculos)
         {
             _veiculosRepositorio.AdicionarVeiculoAoUsuario(veiculos);
+
             return RedirectToAction("Index");
         }
 
-        
+
+
 
     }
 }

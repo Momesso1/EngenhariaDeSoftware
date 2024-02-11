@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MoMotors.Models
 {
+
+    
+
     public class VeiculosModel
     {
         public int Id { get; set; }
@@ -16,6 +19,7 @@ namespace MoMotors.Models
 
         [Required]
         public string Estado { get; set; }
+
 
         [Required]
         public string Cidade { get; set; }
@@ -81,6 +85,9 @@ namespace MoMotors.Models
         public bool? VidrosEletricos { get; set; }
 
         public bool? VolanteComRegulagemDeAltura { get; set; }
+
+
+
 
     }
 }

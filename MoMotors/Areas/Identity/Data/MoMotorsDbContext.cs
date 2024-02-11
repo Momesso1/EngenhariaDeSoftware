@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MoMotors.Areas.Identity.Data;
 using MoMotors.Areas.Identity.Models;
 using MoMotors.Models;
+using System.Reflection.Emit;
 
 namespace MoMotors.Data
 {
@@ -32,6 +33,11 @@ namespace MoMotors.Data
                 .WithOne(c => c.User)  // Corrigindo aqui para apontar para a propriedade User
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+          //  builder.Entity<VeiculosModel>()
+            // .HasMany(v => v.ImagensVeiculo)
+             //.WithOne(iv => iv.Veiculo)
+             //.HasForeignKey(iv => iv.VeiculoId);
         }
     }
 }

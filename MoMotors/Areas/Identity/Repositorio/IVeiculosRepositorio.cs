@@ -1,12 +1,14 @@
-﻿using MoMotors.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using MoMotors.Models;
 
 namespace MoMotors.Areas.Identity.Repositorio
 {
     public interface IVeiculosRepositorio
     {
 
-        VeiculosModel AdicionarVeiculoAoUsuario(VeiculosModel veiculos);
+        void AdicionarVeiculoAoUsuario(VeiculosModel veiculos);
         VeiculosModel ListarPorId(int id);
+
         List<VeiculosModel> ObterTodosVeiculos();
 
     }

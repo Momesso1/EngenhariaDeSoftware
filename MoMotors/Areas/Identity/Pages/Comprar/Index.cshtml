@@ -3,7 +3,6 @@
     Layout = "~/Areas/Identity/Pages/_AuthLayout.cshtml";
 
 }
-
 @using MoMotors.Models
 @model List<VeiculosModel>
 
@@ -20,8 +19,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet">
-
-
     <style>
         * {
             box-sizing: border-box;
@@ -102,13 +99,10 @@
                     color: #666;
                 }
 
-
-
     </style>
 
 </head>
 <body>
-
     
     <div class="container" style="zoom: 80%; margin-top: 2%;">
         <div class="row" style="margin-left: 6%">
@@ -188,13 +182,8 @@
                     
                 </div>
 
-
                 <div class="row">
-                   
-
-
-
-            
+                            
                 <div class="col-md-3">
 
                     <label for="mileage">Quilometragem*</label>
@@ -220,37 +209,14 @@
                         <label for="transmission">Opcionais</label>
                         <select id="transmission" name="Cambio" required>
                             <option value="">Selecione os atributos opcionais</option>
-                            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                         </select>
                     </div>
-                   
-
-
-
 
                 </div>
-              
-                
 
                 </div>
-                
-                
+             
                 <div class="row" style="margin-top: 15px;">
                     <div class="col-md-2 mb-3">
                         <div class="form-check">
@@ -420,13 +386,7 @@
                         </div>
                     </div>
                 </div>
-
-            
-
-
             </div>
-
-
     </div>
     <div style="justify-content: center; text-align: center; margin-top: 3%; font-size: 18px">
 
@@ -443,9 +403,7 @@
                 {
                     @foreach (var veiculo in @Model)
                     {
-                        
-
-
+                       
                         <div class="col mb-5">
                             <div class="card h-100">
 
@@ -529,37 +487,6 @@
             // URL das APIs do IBGE
             const estadosApiUrl = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados';
             const municipiosApiUrl = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados/';
-
-            // Função para abrir o popu p quando o usuário clicar no campo de opcionais
-            function showOpcionaisPopup() {
-                document.querySelector('.popup').style.display = 'block';
-            }
-
-            // Event listeners para os botões do popup
-            document.querySelector('.popup-close').addEventListener('click', function () {
-                // Fechar o popup
-                document.querySelector('.popup').style.display = 'none';
-            });
-
-            document.querySelector('.popup-done').addEventListener('click', function () {
-                // Aplicar os filtros e fechar o popup
-                applyFilters();
-                document.querySelector('.popup').style.display = 'none';
-            });
-
-            document.querySelector('.popup-clear').addEventListener('click', function () {
-                // Limpar os filtros
-                clearFilters();
-            });
-
-            function applyFilters() {
-                // Código para aplicar os filtros baseados nas opções selecionadas
-                // Exemplo: obter as opções selecionadas e atualizar a lista de veículos
-            }
-
-            function clearFilters() {
-                // Código para limpar os filtros e redefinir a lista de veículos
-            }
 
             // Preencher o select de estados
             fetch(estadosApiUrl)

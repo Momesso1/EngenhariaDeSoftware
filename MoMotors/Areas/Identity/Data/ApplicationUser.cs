@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using MoMotors.Areas.Identity.Models;
 using MoMotors.Data;
 using MoMotors.Models;
@@ -11,11 +12,43 @@ namespace MoMotors.Areas.Identity.Data
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
+        private readonly MoMotorsDbContext _dbContext;
+
+        public virtual ICollection<VeiculosModel> Veiculos { get; set; }
+
+        public virtual ICollection<ChatIAModel> ChatIA { get; set; }
+
+
         [PersonalData]
         [Column(TypeName = "nvarchar(50)")]
         public string Name { get; set; }
 
        
+        [PersonalData]
+        public byte[]? ImagemPerfil { get; set; }
+
+        public ApplicationUser(MoMotorsDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public ApplicationUser() { }
+
+
+        public void UploadImagemPerfil(IFormFile imagem)
+        {
+            if (imagem != null && imagem.Length > 0)
+            {
+                using (var memoryStream = new System.IO.MemoryStream())
+                {
+                    imagem.CopyTo(memoryStream);
+                    ImagemPerfil = memoryStream.ToArray();
+                }
+
+                _dbContext.SaveChanges();
+            }
+        }
+
 
         public int GetQuantidadeVeiculosRegistradosNoBancoDeDados(MoMotorsDbContext MoMotorsDbContext)
         {
@@ -47,9 +80,7 @@ namespace MoMotors.Areas.Identity.Data
             }
         }
 
-        public virtual ICollection<VeiculosModel> Veiculos { get; set; }
-
-        public virtual ICollection<ChatIAModel> ChatIA { get; set; }
+        
 
     }
 

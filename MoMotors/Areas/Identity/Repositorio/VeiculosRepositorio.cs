@@ -1,6 +1,13 @@
-﻿using MoMotors.Areas.Identity.Repositorio;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MoMotors.Areas.Identity.Repositorio;
 using MoMotors.Data;
 using MoMotors.Models;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Security.Claims;
 
 public class VeiculosRepositorio : IVeiculosRepositorio
@@ -14,28 +21,41 @@ public class VeiculosRepositorio : IVeiculosRepositorio
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public VeiculosModel AdicionarVeiculoAoUsuario(VeiculosModel veiculos)
+    private byte[] SalvarImagem(IFormFile imagem)
     {
-        // Get the current user's ID from the HttpContext
+        using (var memoryStream = new MemoryStream())
+        {
+            imagem.CopyTo(memoryStream);
+            return memoryStream.ToArray();
+        }
+    }
+
+    public void AdicionarVeiculoAoUsuario(VeiculosModel veiculos)
+    {
         string currentUserId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        // Set the UserId property before adding to the context
+        if (string.IsNullOrEmpty(currentUserId))
+        {
+            throw new InvalidOperationException("Usuário não autenticado.");
+        }
+
         veiculos.UserId = currentUserId;
+       
 
         _context.Veiculos.Add(veiculos);
         _context.SaveChanges();
-
-        return veiculos;
     }
+
 
     public VeiculosModel ListarPorId(int id)
     {
         return _context.Veiculos.FirstOrDefault(x => x.Id == id);
     }
 
+   
+
     public List<VeiculosModel> ObterTodosVeiculos()
     {
         return _context.Veiculos.ToList();
     }
 }
-
