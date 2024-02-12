@@ -12,6 +12,7 @@ namespace MoMotors.Data
         public DbSet<VeiculosModel> Veiculos { get; set; }
         public DbSet<ChatIAModel> ChatIA { get; set; }
 
+        public DbSet<ImagemVeiculo> ImagensVeiculo { get; set; }
 
         public MoMotorsDbContext(DbContextOptions<MoMotorsDbContext> options)
             : base(options)

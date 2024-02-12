@@ -18,11 +18,10 @@ namespace MoMotors.Areas.Identity.Data
 
         public virtual ICollection<ChatIAModel> ChatIA { get; set; }
 
-
         [PersonalData]
         [Column(TypeName = "nvarchar(50)")]
         public string Name { get; set; }
-
+        
        
         [PersonalData]
         public byte[]? ImagemPerfil { get; set; }

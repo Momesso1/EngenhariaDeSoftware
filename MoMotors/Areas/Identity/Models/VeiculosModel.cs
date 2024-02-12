@@ -86,8 +86,21 @@ namespace MoMotors.Models
 
         public bool? VolanteComRegulagemDeAltura { get; set; }
 
+        public List<ImagemVeiculo> Imagens { get; set; }
+    }
 
 
+    public class ImagemVeiculo
+    {
+        public int Id { get; set; }
 
+        [Required]
+        public int VeiculoId { get; set; }
+
+        [ForeignKey(nameof(VeiculoId))]
+        public virtual VeiculosModel Veiculo { get; set; }
+
+        [Required]
+        public byte[] DadosDaImagem { get; set; } // Tipo byte[] para armazenar dados binários da imagem
     }
 }

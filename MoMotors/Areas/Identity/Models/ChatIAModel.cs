@@ -11,7 +11,7 @@ namespace MoMotors.Areas.Identity.Models
 
         [Required]
         public string UserId { get; set; }
-
+        
         [ForeignKey(nameof(UserId))]
         public virtual ApplicationUser User { get; set; }
 

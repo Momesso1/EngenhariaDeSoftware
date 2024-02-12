@@ -21,16 +21,8 @@ public class VeiculosRepositorio : IVeiculosRepositorio
         _httpContextAccessor = httpContextAccessor;
     }
 
-    private byte[] SalvarImagem(IFormFile imagem)
-    {
-        using (var memoryStream = new MemoryStream())
-        {
-            imagem.CopyTo(memoryStream);
-            return memoryStream.ToArray();
-        }
-    }
 
-    public void AdicionarVeiculoAoUsuario(VeiculosModel veiculos)
+    public void AdicionarVeiculoAoUsuario(VeiculosModel veiculo, List<IFormFile> imagens)
     {
         string currentUserId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -39,12 +31,39 @@ public class VeiculosRepositorio : IVeiculosRepositorio
             throw new InvalidOperationException("Usuário não autenticado.");
         }
 
-        veiculos.UserId = currentUserId;
-       
+        veiculo.UserId = currentUserId;
 
-        _context.Veiculos.Add(veiculos);
+        _context.Veiculos.Add(veiculo);
+        _context.SaveChanges();
+
+        // Associar imagens ao veículo e salvar no banco de dados
+        foreach (var imagem in imagens)
+        {
+            byte[] dadosImagem = ConverterImagemParaBytes(imagem);
+
+            var novaImagem = new ImagemVeiculo
+            {
+                VeiculoId = veiculo.Id,
+                DadosDaImagem = dadosImagem
+            };
+
+            _context.ImagensVeiculo.Add(novaImagem);
+        }
+
         _context.SaveChanges();
     }
+
+    // Método para converter IFormFile em byte[]
+    private byte[] ConverterImagemParaBytes(IFormFile imagem)
+    {
+        using (var stream = new MemoryStream())
+        {
+            imagem.CopyTo(stream);
+            return stream.ToArray();
+        }
+    }
+
+
 
 
     public VeiculosModel ListarPorId(int id)

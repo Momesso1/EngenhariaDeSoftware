@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MoMotors.Migrations
 {
     /// <inheritdoc />
-    public partial class migracao123 : Migration
+    public partial class migracao12451 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -255,6 +255,26 @@ namespace MoMotors.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ImagensVeiculo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    VeiculoId = table.Column<int>(type: "int", nullable: false),
+                    DadosDaImagem = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ImagensVeiculo", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ImagensVeiculo_Veiculos_VeiculoId",
+                        column: x => x.VeiculoId,
+                        principalTable: "Veiculos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -300,6 +320,11 @@ namespace MoMotors.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ImagensVeiculo_VeiculoId",
+                table: "ImagensVeiculo",
+                column: "VeiculoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PerguntaRespostaModel_ChatIAModelId",
                 table: "PerguntaRespostaModel",
                 column: "ChatIAModelId");
@@ -329,13 +354,16 @@ namespace MoMotors.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "ImagensVeiculo");
+
+            migrationBuilder.DropTable(
                 name: "PerguntaRespostaModel");
 
             migrationBuilder.DropTable(
-                name: "Veiculos");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "Veiculos");
 
             migrationBuilder.DropTable(
                 name: "ChatIA");

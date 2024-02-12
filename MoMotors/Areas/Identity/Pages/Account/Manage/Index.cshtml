@@ -13,6 +13,7 @@
     Layout = "~/Areas/Identity/Pages/_AuthLayout.cshtml";
     var user = await UserManager.GetUserAsync(User);
     int quantidadeVeiculos = user.GetQuantidadeVeiculosRegistradosNoBancoDeDados(MoMotorsDbContext);
+
 }
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 

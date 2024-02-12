@@ -1,11 +1,15 @@
-﻿@using MoMotors.Models
+﻿@using MoMotors.Data
+@using MoMotors.Models
+@using Microsoft.EntityFrameworkCore;
+
+@model VeiculosModel
+@inject MoMotorsDbContext MoMotorsDbContext
+@inject UserManager<ApplicationUser> UserManager
 @{
 
     Layout = "~/Areas/Identity/Pages/_AuthLayout.cshtml";
-
+    var veiculo = MoMotorsDbContext.Set<VeiculosModel>().Include(v => v.Imagens).FirstOrDefault(v => v.Id == Model.Id);
 }
-@model VeiculosModel
-
 
 
 <!DOCTYPE html>
@@ -108,7 +112,7 @@
         }
 
             .details td {
-                padding: 10px;
+                padding: 6px;
                 border: 1px solid #f0f0f0;
             }
 
@@ -142,27 +146,14 @@
                 object-fit: cover;
             }
 
-        .thumbnails {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-
-        .thumbnail {
-            width: 24%;
-            height: 100px;
-            object-fit: cover;
-            cursor: pointer;
-            border: 2px solid #f0f0f0;
-            border-radius: 5px;
-        }
+       
 
             .thumbnail:hover {
                 border-color: #333;
             }
 
         .details {
-            width: 110%;
+            width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
             background-color: #f0f8ff; /* Azul mais claro e discreto */
@@ -178,130 +169,186 @@
                     font-weight: bold;
                     font-size: 14px;
                     width: 40%;
-                    padding-left: 10%;
+                    padding-left: 6.5%;
                 }
 
                 .details td:last-child {
                     width: 60%;
                     font-size: 14px;
-                    padding-left: 9%;
+                    padding-left: 15%;
                 }
 
         .check-symbol {
             color: green;
             font-size: 16px;
         }
+
     </style>
 
 </head>
 
 <body>
     <div class="container" style="margin-top: 5%;">
-        <div class="left" ">
-            
-            <div class="gallery">
-                <div class="main">
-                    <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="Porsche Macan 5-door SUV blue" id="main-image">
-                </div>
-                <div class="thumbnails">
-                    <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="Front view" class="thumbnail" onclick="changeImage(this)">
-                    <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="Back view" class="thumbnail" onclick="changeImage(this)">
-                    <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="Interior view" class="thumbnail" onclick="changeImage(this)">
-                    <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="Engine view" class="thumbnail" onclick="changeImage(this)">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="gallery">
+                                    <div class="main">
+                                        <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="Porsche Macan 5-door SUV blue" class="img-thumbnail" id="main-image"
+                                             style="width: 400vh; height: 100%;">
+                                    </div>
+
+
+                                    <div class="thumbnails">
+                                        @if (Model.Imagens != null && Model.Imagens.Count > 0)
+                                        {
+                                                @foreach (var imagem in Model.Imagens)
+                                                {
+                                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(imagem.DadosDaImagem)" alt="Imagem do Veículo" class="thumbnail"
+                                                     onclick="changeImage(this)" />
+                                                }
+                                        }
+                                        <!--   
+
+                                        <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="Front view" class="thumbnail" onclick="changeImage(this)">
+                                        <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="Back view" class="thumbnail" onclick="changeImage(this)">
+                                        <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="Interior view" class="thumbnail" onclick="changeImage(this)">
+                                        <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="Engine view" class="thumbnail" onclick="changeImage(this)">
+
+                                        -->
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <h1>@Model.Marca @Model.Modelo @Model.Cor</h1>
+                                <p class="info">@Model.AnoECombustivel.Substring(0, 4) • @Model.Quilometragem km </p>
+                                <p class="price">@Model.Preco</p>
+                                <table class="details">
+                                       
+                                            <tr>
+                                                <td>Marca:</td>
+                                                <td>@Model.Marca</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Modelo:</td>
+                                                <td>@Model.Modelo</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>Transmissão:</td>
+                                                <td>@Model.Cambio</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Condição:</td>
+                                                <td>@Model.Condicao</td>
+
+                                            </tr>
+                                            <tr>
+                                                <td>Ano:</td>
+                                                <td>@Model.AnoECombustivel.Substring(0, 4)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Quilometragem:</td>
+                                                <td>@Model.Quilometragem</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tipo de combustível:</td>
+
+                                                @if (Model.AnoECombustivel[5] == '1')
+                                                {
+                                                    <td>
+                                                        Gasolina
+                                                    </td>
+                                                }
+                                                else if (Model.AnoECombustivel[5] == '3')
+                                                {
+                                                    <td>
+                                                        Diesel
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        Etanol
+                                                    </td>
+                                                }
+
+
+
+
+
+                                            </tr>
+
+
+                                            <tr>
+                                                <td>Cor:</td>
+                                                <td>@Model.Cor</td>
+                                            </tr>
+
+                                            
+
+
+                                   
+                                   
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div>
+
+                            <h5>
+                                Descrição
+                            </h5>
+                            <p>
+                                @Model.Descricao
+                            </p>
+
+                        </div>
+
+
+
+
+                    </div>
                 </div>
             </div>
-
-
-
-          
-
-
-            
-        </div>
-
-
-
-
-
-        <div class="right">
-            <h1>@Model.Marca @Model.Modelo @Model.Cor</h1>
-            <p class="info">@Model.AnoECombustivel.Substring(0, 4) • @Model.Quilometragem km </p>
-            <p class="price">@Model.Preco</p>
-            <button class="favorite"><i class="fas fa-heart"></i> Adicionar aos favoritos</button>
-            <table class="details">
-                <tr>
-                    <td>Marca:</td>
-                    <td>@Model.Marca</td>
-                </tr>
-                <tr>
-                    <td>Modelo:</td>
-                    <td>@Model.Modelo</td>
-                </tr>
-               
-                <tr>
-                    <td>Transmissão:</td>
-                    <td>@Model.Cambio</td>
-                </tr>
-                <tr>
-                    <td>Condição:</td>
-                    <td>@Model.Condicao</td>
-                    
-                </tr>
-                <tr>
-                    <td>Ano:</td>
-                    <td>@Model.AnoECombustivel.Substring(0, 4)</td>
-                </tr>
-                <tr>
-                    <td>Quilometragem:</td>
-                    <td>@Model.Quilometragem</td>
-                </tr>
-                <tr>
-                    <td>Tipo de combustível:</td>
-                    
-                        @if (Model.AnoECombustivel[5] == '1')
-                        {
-                        <td>
-                            Gasolina
-                        </td>
-                        }
-                        else if (Model.AnoECombustivel[5] == '3')
-                        {
-                            <td>
-                            Diesel
-                            </td>
-                        }
-                        else
-                        {
-                            <td>
-                            Etanol
-                            </td>
-                        }
-
-                    
-                    
-                    
-                    
-                </tr>
-               
-              
-                <tr>
-                    <td>Cor:</td>
-                    <td>@Model.Cor</td>
-                </tr>
-
-                <tr>
-                    <td>FIPE:</td>
-                    <td>@Model.FIPE</td>
-
-                </tr>
-                
-                
-            </table>
         </div>
     </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <div class="container">
-        <div class="row" style="margin-top: 15px">
+        
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div style="margin-left: 2%" >
+                            <strong style="font-size: 18px">Itens do carro</strong>
+                        </div>
+
+                        <hr />
+                        <div class="row">
+                           
+
             @foreach (var property in typeof(VeiculosModel).GetProperties())
             {
                 var propertyName = property.Name;
@@ -411,47 +458,97 @@
                 {
                     var propertyValue = propertyInfo.GetValue(Model);
 
-                    if (propertyName != "Cambio" && propertyName != "Estado" && propertyName != "Cidade" && propertyName != "Modelo" && propertyName != "Marca" && propertyName != "Preco" && propertyName != "AnoECombustivel" && propertyName != "Condicao" && propertyName != "Quilometragem" && propertyName != "Cor" && propertyName != "Id" && propertyName != "FIPE" && propertyName != "User" && propertyName != "UserId" && propertyName != "Descricao" && propertyName != "Tipo")
+                    if (propertyName != "Cambio" && propertyName != "Estado" && propertyName != "Cidade" && propertyName != "Modelo" && propertyName != "Marca" && propertyName != "Preco" && propertyName != "AnoECombustivel" && propertyName != "Condicao" && propertyName != "Quilometragem" && propertyName != "Cor" && propertyName != "Id" && propertyName != "FIPE" && propertyName != "User" && propertyName != "UserId" && propertyName != "Descricao" && propertyName != "Tipo" && propertyName != "ImagemVeiculo" && propertyName != "Imagens" && propertyName != "ImagensUrls")
                     {
-                        <div class="col-md-4 mb-8">
-                            <div class="form-check">
-                                @if (propertyValue != null && (bool)propertyValue) // Verifica se o valor não é null e é verdadeiro
-                                {
-                                    <span class="check-symbol">&#x2713;</span>
-                                }
-                                else
-                                {
-                                    <span style="color: red; font-size: 10px">&#x274c;</span>
-                                }
+                                        @if (propertyValue != null && (bool)propertyValue) 
+                                        {
+                                            <div class="col-md-4">
+                                                <div class="form-check">
 
-                                
-                                <label class="form-check-label" for="@propertyName">@displayName</label>
-                            </div>
-                        </div>
+
+
+
+                                                    <label class="form-check-label" style="margin-top: 12.5px" for="@propertyName"> @displayName</label>
+                                                </div>
+                                            </div>
+                                        }
+                        
                     }
                 }
-            }
+                            }
+                        </div>
+                    </div>
+                    </div>
+                </div>
         </div>
+    
+    <!-- ... (código anterior) ... -->
+    <div class="container" style="margin-top: 2%">
+        <div class="col-md-12">
+            <div class="card bg-dark text-white">
+                <div class="card-body">
+                    <div style="margin-left: 2%" class="text-center">
+                        <strong style="font-size: 20px">Compare os preços</strong>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <h2>Valor anunciado</h2>
+                            <p class="price text-white">@Model.Preco</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h2>MoMotors</h2>
+                            <p class="price text-white">@Model.FIPE</p>
+                            <p class="info text-white">Valor médio de carros iguais a este anunciado na Webmotors</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h2>Tabela FIPE</h2>
+                            <p class="price text-white">@Model.FIPE</p>
+                            <p class="info text-white">Valor deste carro na Tabela Fipe</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ... (outros cards) ... -->
     </div>
 
-    
-    <div class="container">
-        <div>
 
-            <h5>
-                Descrição
-            </h5>
-            <p>
-                @Model.Descricao
-            </p>
+    <div class="container" style="margin-top: 2%">
 
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div style="margin-left: 2%">
+                        <strong style="font-size: 18px">Sobre o vendedor</strong>
+                    </div>
+                    
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-4">
+                            @foreach (var user in MoMotorsDbContext.Users)
+                            {
+                                if (user.Id == Model.UserId)
+                                {
+                                    <h2>Informações do Anunciante</h2>
+                                    <p >Nome: @user.Name</p>
+                                    <p >Email: @user.Email</p>
+                                }
+                            }
+
+                          
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-       
-        
 
+        <!-- ... (outros cards) ... -->
 
     </div>
-    
+
+    <!-- ... (código posterior) ... -->
+
     <script>
 
 
@@ -463,6 +560,16 @@
             // update the src attribute of the main image with the thumbnail src
             main.setAttribute("src", src);
         }
+
+        // Ensure that the main image is initially loaded with the first thumbnail
+        document.addEventListener("DOMContentLoaded", function () {
+            // get the first thumbnail element
+            let firstThumbnail = document.querySelector(".thumbnails img");
+            // call the changeImage function with the first thumbnail as an argument
+            if (firstThumbnail) {
+                changeImage(firstThumbnail);
+            }
+        });
 
     </script>
 

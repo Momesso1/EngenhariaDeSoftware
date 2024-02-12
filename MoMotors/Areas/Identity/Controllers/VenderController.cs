@@ -32,17 +32,16 @@ namespace MoMotors.Areas.Identity.Controllers
             return View("~/Areas/Identity/Pages/Vender/Index.cshtml");
         }
 
-      
-
 
 
         [HttpPost]
-        public IActionResult AdicionarVeiculoAoUsuario(VeiculosModel veiculos)
+        public IActionResult AdicionarVeiculoAoUsuario(VeiculosModel veiculos, List<IFormFile> imagens)
         {
-            _veiculosRepositorio.AdicionarVeiculoAoUsuario(veiculos);
+            _veiculosRepositorio.AdicionarVeiculoAoUsuario(veiculos, imagens);
 
             return RedirectToAction("Index");
         }
+
 
 
 

@@ -22,7 +22,6 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 })
 .AddEntityFrameworkStores<MoMotorsDbContext>();
 
-
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 
@@ -56,8 +55,10 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+
 app.UseEndpoints(endpoints =>
 {
+    
     endpoints.MapRazorPages();
 });
 

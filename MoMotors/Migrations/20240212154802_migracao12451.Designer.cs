@@ -12,8 +12,8 @@ using MoMotors.Data;
 namespace MoMotors.Migrations
 {
     [DbContext(typeof(MoMotorsDbContext))]
-    [Migration("20240211112413_migracao123")]
-    partial class migracao123
+    [Migration("20240212154802_migracao12451")]
+    partial class migracao12451
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -282,6 +282,28 @@ namespace MoMotors.Migrations
                     b.ToTable("PerguntaRespostaModel");
                 });
 
+            modelBuilder.Entity("MoMotors.Models.ImagemVeiculo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("DadosDaImagem")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("VeiculoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VeiculoId");
+
+                    b.ToTable("ImagensVeiculo");
+                });
+
             modelBuilder.Entity("MoMotors.Models.VeiculosModel", b =>
                 {
                     b.Property<int>("Id")
@@ -495,6 +517,17 @@ namespace MoMotors.Migrations
                     b.Navigation("ChatIA");
                 });
 
+            modelBuilder.Entity("MoMotors.Models.ImagemVeiculo", b =>
+                {
+                    b.HasOne("MoMotors.Models.VeiculosModel", "Veiculo")
+                        .WithMany("Imagens")
+                        .HasForeignKey("VeiculoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Veiculo");
+                });
+
             modelBuilder.Entity("MoMotors.Models.VeiculosModel", b =>
                 {
                     b.HasOne("MoMotors.Areas.Identity.Data.ApplicationUser", "User")
@@ -516,6 +549,11 @@ namespace MoMotors.Migrations
             modelBuilder.Entity("MoMotors.Areas.Identity.Models.ChatIAModel", b =>
                 {
                     b.Navigation("PerguntasERespostas");
+                });
+
+            modelBuilder.Entity("MoMotors.Models.VeiculosModel", b =>
+                {
+                    b.Navigation("Imagens");
                 });
 #pragma warning restore 612, 618
         }
