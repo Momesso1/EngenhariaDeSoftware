@@ -90,20 +90,7 @@
                 })
                 .catch(error => console.error('Erro:', error));
 
-            // Chamar AJAX dentro da função enviarRequisicao
-            $.ajax({
-                url: '/Chat/Adicionar',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ pergunta: pergunta }),
-                success: function (data) {
-                    respostaDiv.innerText = data.choices[0].message.content;
-                    document.getElementById("pergunta").value = "";
-                },
-                error: function (error) {
-                    console.error('Erro:', error);
-                }
-            });
+           
         }
     </script>
 

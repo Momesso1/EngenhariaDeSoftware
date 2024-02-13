@@ -15,7 +15,7 @@ namespace MoMotors.Areas.Identity.Models
         [ForeignKey(nameof(UserId))]
         public virtual ApplicationUser User { get; set; }
 
-        public virtual ICollection<PerguntaRespostaModel> PerguntasERespostas { get; set; }
+        public virtual List<PerguntaRespostaModel> Chats { get; set; }
     }
 
     public class PerguntaRespostaModel
