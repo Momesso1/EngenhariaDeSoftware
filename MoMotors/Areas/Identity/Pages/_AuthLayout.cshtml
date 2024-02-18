@@ -1,5 +1,6 @@
 ﻿@{
     Layout = "~/Areas/Identity/Pages/Shared/_Layout.cshtml";
+    var user = await UserManager.GetUserAsync(User);
 
 }
 @using Microsoft.AspNetCore.Identity
@@ -7,6 +8,19 @@
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+<head>
+
+    <style>
+        .navbar-img {
+            width: 40px; /* Ajuste o tamanho conforme necessário */
+            height: auto;
+            margin-right: 10px; /* Ajuste a margem conforme necessário */
+        }
+
+       
+    </style>
+
+</head>
 
 
 
@@ -39,23 +53,37 @@
                             </li>
                         }
                     </ul>
+                </div>
+                <div>
 
-                    @if (SignInManager.IsSignedIn(User))
-                    {
+
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <ul class="navbar-nav text-center ml-auto">
                         
-                        <li class="nav-link text-white">
-                            <a id="manage" class="nav-link text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Gerenciar Perfil">Hello @UserManager.GetUserName(User)!</a>
-                        </li>
-                       
 
-                        <ul class="navbar-nav text-center ml-auto">
-                            <li class="nav-link text-white">
-                                <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                    <button id="logout" type="submit" class="nav-link btn btn-link text-white border-0">Logout</button>
-                                </form>
-                            </li>
-                        </ul>
-                    }
+                        <li class="nav-link text-white">
+
+                            <div class="dropdown" > 
+                                <a id="manage" class="nav-link text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Gerenciar Perfil">
+                                    @{
+                                        var base64Image = Convert.ToBase64String(user.ImagemPerfil);
+                                        var imgSrc = $"data:image/png;base64,{base64Image}";
+                                    }
+                                    <img src="@imgSrc" alt="User Profile Image" class="navbar-img" id="profile-image">
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="manage">
+                                    <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                        <button id="logout" type="submit" class="dropdown-item btn btn-link text-black">Sair</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </li>
+
+
+                    </ul>
+                }
                 </div>
             </div>
         </nav>
@@ -72,7 +100,23 @@
 
 @section scripts{
     @await RenderSectionAsync("Scripts", required: false)
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var dropdown = $(".dropdown");
 
+            dropdown.hover(
+                function () {
+                    // Ao passar o mouse, mostrar o dropdown
+                    $(this).find('.dropdown-menu').show();
+                },
+                function () {
+                    // Ao retirar o mouse, esconder o dropdown
+                    $(this).find('.dropdown-menu').hide();
+                }
+            );
+        });
+    </script>
 }
 
 
