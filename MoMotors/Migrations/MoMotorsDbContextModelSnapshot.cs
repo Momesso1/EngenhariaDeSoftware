@@ -506,7 +506,7 @@ namespace MoMotors.Migrations
             modelBuilder.Entity("MoMotors.Areas.Identity.Models.PerguntaRespostaModel", b =>
                 {
                     b.HasOne("MoMotors.Areas.Identity.Models.ChatIAModel", "ChatIA")
-                        .WithMany("PerguntasERespostas")
+                        .WithMany("Chats")
                         .HasForeignKey("ChatIAModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -545,7 +545,7 @@ namespace MoMotors.Migrations
 
             modelBuilder.Entity("MoMotors.Areas.Identity.Models.ChatIAModel", b =>
                 {
-                    b.Navigation("PerguntasERespostas");
+                    b.Navigation("Chats");
                 });
 
             modelBuilder.Entity("MoMotors.Models.VeiculosModel", b =>

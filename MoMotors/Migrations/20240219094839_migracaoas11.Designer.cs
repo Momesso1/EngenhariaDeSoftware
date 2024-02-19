@@ -12,8 +12,8 @@ using MoMotors.Data;
 namespace MoMotors.Migrations
 {
     [DbContext(typeof(MoMotorsDbContext))]
-    [Migration("20240212154802_migracao12451")]
-    partial class migracao12451
+    [Migration("20240219094839_migracaoas11")]
+    partial class migracaoas11
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -509,7 +509,7 @@ namespace MoMotors.Migrations
             modelBuilder.Entity("MoMotors.Areas.Identity.Models.PerguntaRespostaModel", b =>
                 {
                     b.HasOne("MoMotors.Areas.Identity.Models.ChatIAModel", "ChatIA")
-                        .WithMany("PerguntasERespostas")
+                        .WithMany("Chats")
                         .HasForeignKey("ChatIAModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -548,7 +548,7 @@ namespace MoMotors.Migrations
 
             modelBuilder.Entity("MoMotors.Areas.Identity.Models.ChatIAModel", b =>
                 {
-                    b.Navigation("PerguntasERespostas");
+                    b.Navigation("Chats");
                 });
 
             modelBuilder.Entity("MoMotors.Models.VeiculosModel", b =>

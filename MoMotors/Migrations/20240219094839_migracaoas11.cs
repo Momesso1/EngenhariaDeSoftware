@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MoMotors.Migrations
 {
     /// <inheritdoc />
-    public partial class migracao12451 : Migration
+    public partial class migracaoas11 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
