@@ -74,7 +74,7 @@ namespace MoMotors.Areas.Identity.Pages.Account
         {
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name ="Nome Completo")]
+            [Display(Name = "Nome Completo")]
 
             public string Name { get; set; }
             /// <summary>
@@ -85,6 +85,11 @@ namespace MoMotors.Areas.Identity.Pages.Account
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
+
+            [Required]
+            [Phone]
+            [Display(Name = "Número de Telefone")]
+            public string PhoneNumber { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -126,6 +131,7 @@ namespace MoMotors.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
                 user.Name = Input.Name;
+                user.PhoneNumber = Input.PhoneNumber;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

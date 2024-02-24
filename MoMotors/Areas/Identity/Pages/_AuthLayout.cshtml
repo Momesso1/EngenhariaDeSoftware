@@ -17,7 +17,6 @@
             margin-right: 10px; /* Ajuste a margem conforme necessário */
         }
 
-       
     </style>
 
 </head>
@@ -25,66 +24,60 @@
 
 
 <header>
-        <nav class="navbar navbar-expand-md navbar-light bg-dark text-white box-shadow mb-3 fixed-top">
-            <div class="container-fluid">
-                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">MoMotors</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-                        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse justify-content-center" id="navbarCollapse">
-                    <ul class="navbar-nav text-center">
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Comprar" asp-action="Index">Comprar</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Vender" asp-action="Index">Vender</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="ChatIA" asp-action="Index">Chat</a>
-                        </li>
-                        
-                    </ul>
-                </div>
-                <div>
-
-                @if (!User.Identity.IsAuthenticated)
-                {
-                                        <ul class="navbar-nav text-center ml-auto">
-
+    <nav class="navbar navbar-expand-md navbar-light bg-dark text-white box-shadow mb-3 fixed-top">
+        <div class="container-fluid">
+            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">MoMotors</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarCollapse">
+                <ul class="navbar-nav text-center">
                     <li class="nav-item">
-                        <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Register">Cadastrar</a>
+                        <a class="nav-link text-white" asp-area="" asp-controller="Comprar" asp-action="Index">Comprar</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                        <a class="nav-link text-white" asp-area="" asp-controller="Vender" asp-action="Index">Vender</a>
                     </li>
-                    </ul>
-                }
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-area="" asp-controller="ChatIA" asp-action="Index">Chat</a>
+                    </li>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Register">Cadastrar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div>
+
 
                 @if (SignInManager.IsSignedIn(User))
                 {
                     <ul class="navbar-nav text-center ml-auto">
-                        
+
 
                         <li class="nav-link text-white">
 
-                            <div class="dropdown" > 
+                            <div class="dropdown">
                                 <a id="manage" class="nav-link text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Gerenciar Perfil">
+
+
                                     @if (user.ImagemPerfil == null || user.ImagemPerfil.Length == 0)
                                     {
                                         <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
-                                             alt="Generic placeholder image" class="img"
-                                             style="width: 40px; height: auto; margin-right: 10px">
+                                             alt="Generic placeholder image" class="navbar-img">
                                     }
-                                    else
+                                    else if (user.ImagemPerfil != null && user.ImagemPerfil.Length > 0)
                                     {
                                         var base64Image = Convert.ToBase64String(user.ImagemPerfil);
                                         var imgSrc = $"data:image/png;base64,{base64Image}";
-                                        <img src="@imgSrc"
-                                             alt="User Profile Image" class="img"
-                                             style="width: auto; height: 25px; margin-right: 10px">
+                                        <img src="@imgSrc" alt="User Profile Image" class="navbar-img" id="profile-image">
                                     }
-                                   
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="manage">
                                     <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
@@ -98,9 +91,9 @@
 
                     </ul>
                 }
-                </div>
             </div>
-        </nav>
+        </div>
+    </nav>
 
 </header>
 
@@ -112,7 +105,7 @@
     </main>
 </div>
 
-@section scripts{
+@section scripts {
     @await RenderSectionAsync("Scripts", required: false)
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
