@@ -295,7 +295,20 @@
 
                     <div class="container">
                         <div>
+                            <div >
+                                <h4>Vendedor</h4>
+                                @foreach (var user in MoMotorsDbContext.Users)
+                                {
+                                    if (user.Id == Model.UserId)
+                                    {
+                                        <p>Nome: @user.Name</p>
+                                        <p>Email: @user.Email</p>
+                                        <p>Telefone: @user.PhoneNumber</p>
+                                    }
+                                }
 
+
+                            </div>
                             <h5>
                                 Descrição
                             </h5>
@@ -508,35 +521,6 @@
         <!-- ... (outros cards) ... -->
     </div>
 
-
-    <div class="container" style="margin-top: 2%">
-
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <div style="margin-left: 2%">
-                        <strong style="font-size: 18px">Sobre o vendedor</strong>
-                    </div>
-                    
-                    <hr />
-                    <div class="row">
-                        <div class="col-md-4">
-                            @foreach (var user in MoMotorsDbContext.Users)
-                            {
-                                if (user.Id == Model.UserId)
-                                {
-                                    <h2>Informações do Anunciante</h2>
-                                    <p >Nome: @user.Name</p>
-                                    <p >Email: @user.Email</p>
-                                }
-                            }
-
-                          
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- ... (outros cards) ... -->
 

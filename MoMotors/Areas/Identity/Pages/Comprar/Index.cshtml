@@ -107,301 +107,45 @@
 
 
 
+        .search {
+            position: relative;
+            box-shadow: 0 0 40px rgba(51, 51, 51, .1);
+        }
+
+            .search input {
+                height: 60px;
+                text-indent: 25px;
+                border: 2px solid #d6d4d4;
+            }
+
+
+                .search input:focus {
+                    box-shadow: none;
+                    border: 2px solid blue;
+                }
+
+            .search .fa-search {
+                position: absolute;
+                top: 20px;
+                left: 16px;
+            }
+
+            .search button {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                height: 50px;
+                width: 110px;
+                background: blue;
+            }
     </style>
 
 </head>
 <body>
+
     
-    <div style="background-color: #EDEDEE">
-        <div class="container" style="zoom: 80%; margin-top: 2%;">
-            <div class="row" style="margin-left: 6%">
-                <div class="col-lg-12">
 
-                    <div class="row" style="margin-top: 5%">
-                        <div class="col-md-3">
-                            <label for="tipoVeiculo">Tipo de veículo*</label>
-                            <select id="tipoVeiculo" name="Tipo" required>
-                                <option value="">Selecione o tipo de veículo</option>
-                                <option value="carros">Carros</option>
-                                <option value="motos">Motos</option>
-                                <option value="caminhoes">Caminhões</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="marca">Marca*</label>
-                            <select id="marca" onchange="updateHiddenField('marca')" required>
-                                <option value="">Selecione a marca do veículo</option>
-                            </select>
-
-
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="modelo">Modelo*</label>
-                            <select id="modelo" onchange="updateHiddenField('modelo')" required>
-                                <option value="">Selecione o modelo do veículo</option>
-                            </select>
-
-
-
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="ano">Ano e combustível*</label>
-                            <select id="ano" name="AnoECombustivel" onchange="consultarVeiculo()" required>
-                                <option value="">Selecione a versão do veículo</option>
-                            </select>
-
-                        </div>
-                        <div class="col-md-3">
-                            <label for="condition">Condição*</label>
-                            <select name="Condicao" id="condition" name="Condicao" required>
-                                <option value="">Selecione a condição do veículo</option>
-                                <option value="Novo">Novo</option>
-                                <option value="Usado">Usado</option>
-                            </select>
-                        </div>
-
-
-                        <div class="col-md-3">
-                            <label for="color">Cor*</label>
-                            <select name="Cor" id="color" required>
-                                <option value="">Selecione a cor do veículo</option>
-                                <option value="black">Preto</option>
-                                <option value="white">Branco</option>
-                                <option value="red">Vermelho</option>
-                                <option value="blue">Azul</option>
-                                <option value="silver">Prata</option>
-                                <option value="other">Outra</option>
-                            </select>
-
-                        </div>
-                        <div class="col-md-3">
-                            <label for="price">Preço*</label>
-                            <input type="text" id="price" name="Preco" class="form-control" onkeyup="moeda(this)" minlength="5" required>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="transmission">Câmbio*</label>
-                            <select id="transmission" name="Cambio" required>
-                                <option value="">Selecione o câmbio do veículo</option>
-                                <option value="Automático">Automático</option>
-                                <option value="manual">Manual</option>
-                            </select>
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col-md-3">
-
-                            <label for="mileage">Quilometragem*</label>
-                            <input type="number" id="mileage" class="form-control" name="Quilometragem" required>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="estado">Estado:</label>
-                            <select id="estado" name="estado" required>
-                                <option value="">Selecione um estado</option>
-
-                            </select>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="cidade">Cidade:</label>
-                            <select id="cidade" name="cidade" required>
-                                <option value="">Selecione uma cidade</option>
-                            </select>
-
-                        </div>
-                        <div class="col-md-3">
-                            <label for="transmission">Opcionais</label>
-                            <select id="transmission" name="Cambio" required>
-                                <option value="">Selecione os atributos opcionais</option>
-
-                            </select>
-                        </div>
-
-                    </div>
-
-                </div>
-                <!--
-                    <div class="row" style="margin-top: 15px;">
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="Airbag" class="form-check-input" id="airbag">
-                                <label class="form-check-label" for="airbag">Airbag</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="Alarme" class="form-check-input" id="alarme">
-                                <label class="form-check-label" for="alarme">Alarme</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="ArCondicionado" class="form-check-input" id="ar-condicionado">
-                                <label class="form-check-label" for="ar-condicionado">Ar-condicionado</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="BancoComRegulagemDeAltura" class="form-check-input" id="banco-com-regulagem">
-                                <label class="form-check-label" for="banco-com-regulagem">Banco com regulagem de altura</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="BancosComAquecimento" class="form-check-input" id="bancos-com-aquecimento">
-                                <label class="form-check-label" for="bancos-com-aquecimento">Bancos com aquecimento</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="BancosEmCouro" class="form-check-input" id="bancos-em-couro">
-                                <label class="form-check-label" for="bancos-em-couro">Bancos em couro</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="ControleAutomaticoDeVelocidade" class="form-check-input" id="controle-automatico-velocidade">
-                                <label class="form-check-label" for="controle-automatico-velocidade">Controle automático de velocidade</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="ControleDeTracao" class="form-check-input" id="controle-de-tracao">
-                                <label class="form-check-label" for="controle-de-tracao">Controle de tração</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="DesembacadorTraseiro" class="form-check-input" id="desembacador-traseiro">
-                                <label class="form-check-label" for="desembacador-traseiro">Desembaçador traseiro</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="DirecaoHidraulica" class="form-check-input" id="direcao-hidraulica">
-                                <label class="form-check-label" for="direcao-hidraulica">Direção hidráulica</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="EncostoDeCabecaTraseiro" class="form-check-input" id="encosto-cabeca-traseiro">
-                                <label class="form-check-label" for="encosto-cabeca-traseiro">Encosto de cabeça traseiro</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="FarolDeXenonio" class="form-check-input" id="farol-de-xenonio">
-                                <label class="form-check-label" for="farol-de-xenonio">Farol de xenônio</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="FreioABS" class="form-check-input" id="freio-abs">
-                                <label class="form-check-label" for="freio-abs">Freio ABS</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="GPS" class="form-check-input" id="gps">
-                                <label class="form-check-label" for="gps">GPS</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="LimpadorTraseiro" class="form-check-input" id="limpador-traseiro">
-                                <label class="form-check-label" for="limpador-traseiro">Limpador traseiro</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="Radio" class="form-check-input" id="radio">
-                                <label class="form-check-label" for="radio">Rádio</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="RetrovisoresEletricos" class="form-check-input" id="retrovisores-eletricos">
-                                <label class="form-check-label" for="retrovisores-eletricos">Retrovisores elétricos</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="SensorDeChuva" class="form-check-input" id="sensor-de-chuva">
-                                <label class="form-check-label" for="sensor-de-chuva">Sensor de chuva</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="SensorDeEstacionamento" class="form-check-input" id="sensor-de-estacionamento">
-                                <label class="form-check-label" for="sensor-de-estacionamento">Sensor de estacionamento</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox"  name="TetoSolar" class="form-check-input" id="teto-solar">
-                                <label class="form-check-label" for="teto-solar">Teto solar</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="Tracao4x4" class="form-check-input" id="tracao-4x4">
-                                <label class="form-check-label" for="tracao-4x4">Tração 4x4</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="TravasEletricas" class="form-check-input" id="travas-eletricas">
-                                <label class="form-check-label" for="travas-eletricas">Travas elétricas</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="VidrosEletricos" class="form-check-input" id="vidros-eletricos">
-                                <label class="form-check-label" for="vidros-eletricos">Vidros elétricos</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" name="VolanteComRegulagemDeAltura" class="form-check-input" id="volante-com-regulagem">
-                                <label class="form-check-label" for="volante-com-regulagem">Volante com regulagem de altura</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    -->
-            </div>
-        </div>
-    </div>
-
-    <div style="justify-content: center; text-align: center; margin-top: 3%; font-size: 18px">
+    <div style="justify-content: center; text-align: center; margin-top: 7%; font-size: 18px">
 
         <i class="bi bi-arrow-up text-danger"></i> Preço acima do valor da tabela FIPE
         <i class="bi bi-arrow-down text-success"></i> Preço abaixo do valor da tabela FIPE
@@ -504,56 +248,8 @@
         </div>
     </section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Elementos do DOM
-            const estadoSelect = document.getElementById('estado');
-            const cidadeSelect = document.getElementById('cidade');
-
-            // URL das APIs do IBGE
-            const estadosApiUrl = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados';
-            const municipiosApiUrl = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados/';
-
-            // Preencher o select de estados
-            fetch(estadosApiUrl)
-                .then(response => response.json())
-                .then(estados => {
-                    estados.forEach(estado => {
-                        const option = document.createElement('option');
-                        option.value = estado.sigla;
-                        option.textContent = estado.nome;
-                        estadoSelect.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Erro ao obter a lista de estados:', error));
-
-            // Atualizar o select de cidades com base no estado selecionado
-            estadoSelect.addEventListener('change', function () {
-                const estadoSelecionado = estadoSelect.value;
-
-                // Limpar as opções anteriores
-                cidadeSelect.innerHTML = '<option value="">Selecione uma cidade</option>';
-
-                if (estadoSelecionado) {
-                    // Obter a lista de municípios do estado selecionado
-                    fetch(municipiosApiUrl + estadoSelecionado + '/municipios')
-                        .then(response => response.json())
-                        .then(municipios => {
-                            municipios.forEach(municipio => {
-                                const option = document.createElement('option');
-                                option.value = municipio.nome;
-                                option.textContent = municipio.nome;
-                                cidadeSelect.appendChild(option);
-                            });
-                        })
-                        .catch(error => console.error('Erro ao obter a lista de municípios:', error));
-                }
-            });
-        });
-
-
-      
-    </script>
+    
+   
 
 
     <!-- Footer-->

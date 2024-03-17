@@ -77,4 +77,5 @@ public class VeiculosRepositorio : IVeiculosRepositorio
     {
         return _context.Veiculos.ToList();
     }
+
 }

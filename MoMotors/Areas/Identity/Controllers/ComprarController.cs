@@ -55,5 +55,6 @@ namespace MoMotors.Controllers
             return View("~/Areas/Identity/Pages/Comprar/Detalhes.cshtml", veiculo);
         }
 
+
     }
 }
